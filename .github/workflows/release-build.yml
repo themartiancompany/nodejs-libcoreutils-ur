@@ -1994,9 +1994,9 @@ jobs:
       - name:
           _mingw_prefix
         run: |
-          if [[ ${{ _matrix.sys }} == "mingw64" ]]; then \
+          if [[ ${{ matrix.sys }} == "mingw64" ]]; then \
             _mingw_prefix="mingw-w64-"; \
-          else if [[ ${{ _matrix.sys }} == "ucrt64" ]]; then \
+          else if [[ ${{ matrix.sys }} == "ucrt64" ]]; then \
             _mingw_prefix="mingw-ucrt64-"; \
           fi; \
           echo \
