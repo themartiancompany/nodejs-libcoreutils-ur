@@ -2022,7 +2022,6 @@ jobs:
             base-devel
             dos2unix
             git
-            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-nodejs
             python-docutils
             unzip
       - name:
