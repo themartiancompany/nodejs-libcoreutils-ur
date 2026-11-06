@@ -2016,7 +2016,7 @@ jobs:
         run: |
           if [[ ${{ matrix.sys }} == "mingw64" ]]; then \
             _mingw_prefix="mingw-w64-"; \
-          else if [[ ${{ matrix.sys }} == "ucrt64" ]]; then \
+          elif [[ ${{ matrix.sys }} == "ucrt64" ]]; then \
             _mingw_prefix="mingw-ucrt64-"; \
           fi; \
           echo \
