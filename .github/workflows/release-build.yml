@@ -1978,6 +1978,12 @@ jobs:
                 x86_64,
               arch:
                 x86_64 }
+          - { sys:
+                ucrt64,
+              env:
+                x86_64,
+              arch:
+                x86_64 }
     runs-on:
       windows-latest
     defaults:
@@ -1985,6 +1991,18 @@ jobs:
         shell:
           msys2 {0}
     steps:
+      - name:
+          _mingw_prefix
+        run: |
+          if [[ "${{ _matrix.sys }}" == "mingw64" ]]; then \
+            _mingw_prefix="mingw-w64-"; \
+          else if [[ "${{ _matrix.sys }}" == "ucrt64" ]]; then \
+            _mingw_prefix="mingw-ucrt64-"; \
+          fi; \
+          echo \
+            "::set-output name=version::${_mingw_prefix}"
+        id:
+          _mingw_prefix
       - uses:
           msys2/setup-msys2@v2
         with:
@@ -1995,11 +2013,11 @@ jobs:
           install:
             base-devel
             dos2unix
-            mingw-w64-${{ matrix.env }}-github-cli
+            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-github-cli
+            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-jq
+            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-gcc
             git
-            mingw-w64-${{ matrix.env }}-jq
-            mingw-w64-${{ matrix.env }}-gcc
-            mingw-w64-${{ matrix.env }}-nodejs
+            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-nodejs
             python-docutils
             unzip
       - name:
@@ -2216,7 +2234,7 @@ jobs:
           pacman \
             -S \
             --noconfirm \
-            "mingw-w64-${{ matrix.env }}-github-cli"
+            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-github-cli
           bash \
             ".github/gur-mini" \
             "themartiancompany" \
@@ -2276,7 +2294,7 @@ jobs:
           #       "makedepends" > \
           #   "${HOME}/makedepends"
           for _pkg in $(cat "${HOME}/makedepends"); do \
-            _mingw_name="mingw-w64-${{ matrix.env }}-${_pkg}"; \
+            _mingw_name="${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-${_pkg}"; \
             export \
               _pkgs_mingw="${_pkgs_mingw} ${_mingw_name}"; \
             echo \
