@@ -88,8 +88,8 @@ _pkgdesc=(
   "Part of senzacoreutils."
 )
 pkgdesc="${_pkgdesc[*]}"
-_commit=""
-_pkgver="0.0.25"
+_commit="fa7a8e78abd2d14fa6474a6f710945f2568beb97"
+_pkgver="0.0.26"
 pkgver="${_pkgver}"
 pkgrel=1
 arch=(
@@ -143,11 +143,11 @@ _tarname="${_pkg}-${_tag}"
 _npm_tarname="${_ns}-${_pkg}-${_tag}"
 _tarfile="${_tarname}.${_archive_format}"
 _npm_tarfile="${_npm_tarname}.${_archive_format}"
-_sum="boh"
+_sum="489e38184069ee6e81d1f0dfc3fd2efaeb49df787c5a54addfe256e61ab50856"
 _sig_sum="boh"
 _bundle_sum="boh"
 _bundle_sig_sum="boh"
-_npm_sum="boh"
+_npm_sum="58020e57615d558be9fd786535514cadd09ec7d4574e7842a30013df1cdf1c3c"
 _npm_sig_sum="boh"
 # Truocolo
 _evmfs_ns="0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b"
@@ -196,7 +196,7 @@ if [[ "${_evmfs}" == "true" ]]; then
   )
 elif [[ "${_evmfs}" == "false" ]]; then
   if [[ "${_npm}" == "true" ]]; then
-    _uri="${_npm_http}/@${_ns}/${_pkg}/-/${_tarfile}"
+    _uri="${_npm_http}/${_pkg}/-/${_tarfile}"
   elif [[ "${_npm}" == "false" ]]; then
     if [[ "${_tag_name}" == 'pkgver' ]]; then
       if [[ "${_git_http}" == "gitlab" ]]; then
@@ -328,4 +328,3 @@ package_nodejs-libcoreutils() {
 }
 
 # vim:set sw=2 sts=-1 et:
-
