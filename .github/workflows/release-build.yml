@@ -2013,11 +2013,11 @@ jobs:
           install:
             base-devel
             dos2unix
-            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-github-cli
-            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-jq
-            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-gcc
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-github-cli
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-jq
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-gcc
             git
-            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-nodejs
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-nodejs
             python-docutils
             unzip
       - name:
@@ -2234,7 +2234,7 @@ jobs:
           pacman \
             -S \
             --noconfirm \
-            ${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-github-cli
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-github-cli
           bash \
             ".github/gur-mini" \
             "themartiancompany" \
@@ -2294,7 +2294,7 @@ jobs:
           #       "makedepends" > \
           #   "${HOME}/makedepends"
           for _pkg in $(cat "${HOME}/makedepends"); do \
-            _mingw_name="${{ steps.version.outputs._mingw_prefix }}${{ matrix.env }}-${_pkg}"; \
+            _mingw_name="${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-${_pkg}"; \
             export \
               _pkgs_mingw="${_pkgs_mingw} ${_mingw_name}"; \
             echo \
