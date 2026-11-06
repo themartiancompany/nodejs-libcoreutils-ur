@@ -1,24 +1,28 @@
 # SPDX-License-Identifier: AGPL-3.0
 
-#    ----------------------------------------------------------------------
+#    -----------------------------------------------------
 #    Copyright © 2024, 2025, 2026  Pellegrino Prevete
 #
 #    All rights reserved
-#    ----------------------------------------------------------------------
+#    -----------------------------------------------------
 #
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    This program is free software: you can redistribute
+#    it and/or modify it under the terms of the
+#    GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of
+#    the License, or (at your option) any later version.
 #
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
+#    This program is distributed in the hope that it
+#    will be useful, but WITHOUT ANY WARRANTY;
+#    without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#    See the GNU Affero General Public License for
+#    more details.
 #
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+#    You should have received a copy of the
+#    GNU Affero General Public License
+#    along with this program.
+#    If not, see <https://www.gnu.org/licenses/>.
 
 # Maintainers:
 #   Truocolo
@@ -44,11 +48,16 @@ if [[ ! -v "_evmfs" ]]; then
   fi
 fi
 _node="nodejs"
+_node_pkg="${_node}"
 if [[ "${_os}" == "Android" ]]; then
-  _node="nodejs-lts"
+  _node_pkg="${_node}-lts"
+  _node_pkg="${_node}"
 fi
 if [[ ! -v "_npm" ]]; then
   _npm="false"
+fi
+if [[ ! -v "_make" ]]; then
+  _make="false"
 fi
 if [[ ! -v "_git" ]]; then
   _git="false"
@@ -67,21 +76,21 @@ if [[ ! -v "${_archive_format}" ]]; then
     fi
   fi
 fi
-_pkg=opfs
+_pkg=libcoreutils
 pkgbase="nodejs-${_pkg}"
 pkgname=(
   "${pkgbase}"
 )
 _pkgdesc=(
-  "Browser-compatible 'fs' module"
-  "obtained combining the"
-  "'Happy OPFS' and the"
-  "OPFS Tools modules."
+  "Browser-compatible and Node.js"
+  "GNU coreutils' library"
+  "Javascript partial implementation."
+  "Part of senzacoreutils."
 )
 pkgdesc="${_pkgdesc[*]}"
-_commit="8560a11f42a0e0208e7e915daca6b811dfea860d"
-_pkgver="2.0.4"
-pkgver="2.0.5"
+_commit=""
+_pkgver="0.0.25"
+pkgver="${_pkgver}"
 pkgrel=1
 arch=(
   'any'
@@ -102,6 +111,28 @@ makedepends=(
   "npm"
 )
 if [[ "${_npm}" == "true" ]]; then
+  makedepends+=(
+    "npm"
+    "findutils"
+  )
+elif [[ "${_npm}" == "false" ]]; then
+  if [[ "${_make}" == "false" ]]; then
+    makedepends+=(
+      "npm"
+    )
+  fi
+fi
+if [[ "${_git}" == "true" ]]; then
+  makedepends+=(
+    "git"
+  )
+fi
+if [[ "${_make}" == "true" ]]; then
+  makedepends+=(
+    "make"
+  )
+fi
+if [[ "${_npm}" == "true" ]]; then
   _tag="${pkgver}"
   _tag_name="pkgver"
 elif [[ "${_npm}" == "false" ]]; then
@@ -112,12 +143,12 @@ _tarname="${_pkg}-${_tag}"
 _npm_tarname="${_ns}-${_pkg}-${_tag}"
 _tarfile="${_tarname}.${_archive_format}"
 _npm_tarfile="${_npm_tarname}.${_archive_format}"
-_sum="26d4230e0bff3acbd8618eb34aeb93f08a94281e9ac0c54f3f8758ad5225d2d1"
-_sig_sum="296c4fb420c0275d01d095ea9cbcb49ecb25791346d26699c512c073634f6ebb"
-_bundle_sum="e7bf622ac1afab6ebdd14f6ff621874d24aca9e4899f1fa7616a84faea4ed81c"
-_bundle_sig_sum="bdf198594304ccfd8d262ffa4ff5f1a0511ee198a73b1c74ed227f346eda4998"
-_npm_sum="e6f8f5b672465be2bfac83de21f575578612afe510b8fc059e1ce839c4cdc021"
-_npm_sig_sum="39f80370d9cf9b32cb9a41b9976ad9a8915ba7c4350ba24b7729b39af6ba3d39"
+_sum="boh"
+_sig_sum="boh"
+_bundle_sum="boh"
+_bundle_sig_sum="boh"
+_npm_sum="boh"
+_npm_sig_sum="boh"
 # Truocolo
 _evmfs_ns="0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b"
 # Dvorak
@@ -214,66 +245,86 @@ build() {
     "AUTHORS.rst"
     "COPYING"
     "README.md"
+    "base64"
+    "base64.webpack.config.cjs"
+    "dist"
     "eslint.config.mjs"
     "fs-worker"
     "fs-worker.webpack.config.cjs"
+    "libbase64"
+    "libbase64.webpack.config.cjs"
+    "libcoreutils"
     "man"
-    "opfs"
     "package.json"
+    "serve.json"
+    "webpack.config.cjs"
   )
   if [[ "${_npm}" == "false" ]]; then
-    cd \
-      "${_tarname}"
-    mkdir \
-      -p \
-      "build"
-    cp \
-      -r \
-      "${_files[@]}" \
-      "build"
-    cd \
-      "build"
-    npm \
-      install
-    npm \
-      pack
-    mv \
-      "${_ns}-${_pkg}-${_pkgver}.tgz" \
-      "${srcdir}"
+    if [[ "${_make}" == "false" ]]; then
+      cd \
+        "${_tarname}"
+      mkdir \
+        -p \
+        "build"
+      cp \
+        -r \
+        "${_files[@]}" \
+        "build"
+      cd \
+        "build"
+      npm \
+        install
+      npm \
+        pack
+      mv \
+        "${_ns}-${_pkg}-${_pkgver}.tgz" \
+        "${srcdir}"
+    fi
   fi
 }
 
-package_nodejs-opfs() {
+package_nodejs-libcoreutils() {
   local \
-    _npm_options=() \
+    _make_opts=() \
+    _npm_opts=() \
     _find_opts=()
-  _npm_options=(
-    -g 
-    # --user 
-    #   root 
-    --prefix 
-      "${pkgdir}/usr"
-  )
-  find_opts+=(
-    -type
-      "d"
-    -exec
-      chmod
-        755
-        '{}'
-        +
-  )
-  npm \
-    install \
-    "${_npm_options[@]}" \
-    "${srcdir}/${_ns}-${_pkg}-${_pkgver}.tgz"
-  rm \
-    -fr \
-      "${pkgdir}/usr/etc"
-  # Fix npm derp
-  find \
-    "${pkgdir}/usr" \
-    "${_find_opts[@]}"
+  if [[ "${_make}" == "true" ]]; then
+    _make_opts+=(
+      DESTDIR="${pkgdir}"
+      PREFIX="/usr"
+    )
+    make \
+      "${_make_opts[@]}" \
+      install
+  elif [[ "${_make}" == "false" ]]; then
+    _npm_opts=(
+      -g 
+      # --user 
+      #   root 
+      --prefix 
+        "${pkgdir}/usr"
+    )
+    find_opts+=(
+      -type
+        "d"
+      -exec
+        chmod
+          755
+          '{}'
+          +
+    )
+    npm \
+      install \
+      "${_npm_opts[@]}" \
+      "${srcdir}/${_ns}-${_pkg}-${_pkgver}.tgz"
+    rm \
+      -fr \
+        "${pkgdir}/usr/etc"
+    # Fix npm derp
+    find \
+      "${pkgdir}/usr" \
+      "${_find_opts[@]}"
+  fi
 }
 
 # vim:set sw=2 sts=-1 et:
