@@ -2011,6 +2011,20 @@ jobs:
         shell:
           msys2 {0}
     steps:
+      - uses:
+          msys2/setup-msys2@v2
+        with:
+          msystem:
+            ${{ matrix.sys }}
+          update:
+            true
+          install:
+            base-devel
+            dos2unix
+            git
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-nodejs
+            python-docutils
+            unzip
       - name:
           _mingw_prefix
         run: |
@@ -2025,29 +2039,22 @@ jobs:
                  "::set-output name=_mingw_prefix::${_mingw_prefix}"'
         id:
           _mingw_prefix
-      - uses:
-          msys2/setup-msys2@v2
-        with:
-          msystem:
-            ${{ matrix.sys }}
-          update:
-            true
-          install:
-            base-devel
-            dos2unix
-            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-github-cli
-            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-jq
-            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-gcc
-            git
-            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-nodejs
-            python-docutils
-            unzip
       - name:
           Upgrade Arch environment.
         run: |
           pacman \
             -Syu \
             --noconfirm
+      - name:
+          Install build packages.
+        run: |
+          pacman \
+            -S \
+            --noconfirm \
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-github-cli \
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-jq \
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-gcc \
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-nodejs
       - name:
           Installs Crash Bash Library.
         run: |
