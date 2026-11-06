@@ -249,7 +249,6 @@ build() {
     "base64.webpack.config.cjs"
     "dist"
     "eslint.config.mjs"
-    "fs-worker"
     "fs-worker.webpack.config.cjs"
     "libbase64"
     "libbase64.webpack.config.cjs"
