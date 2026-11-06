@@ -91,7 +91,7 @@ pkgdesc="${_pkgdesc[*]}"
 _commit="fa7a8e78abd2d14fa6474a6f710945f2568beb97"
 _pkgver="0.0.26"
 pkgver="${_pkgver}"
-pkgrel=7
+pkgrel=8
 arch=(
   'any'
 )
@@ -140,7 +140,7 @@ elif [[ "${_npm}" == "false" ]]; then
   _tag_name="commit"
 fi
 _tarname="${_pkg}-${_tag}"
-_npm_tarname="${_ns}-${_pkg}-${_tag}"
+_npm_tarname="${_pkg}-${_tag}"
 _tarfile="${_tarname}.${_archive_format}"
 _npm_tarfile="${_npm_tarname}.${_archive_format}"
 _sum="489e38184069ee6e81d1f0dfc3fd2efaeb49df787c5a54addfe256e61ab50856"
@@ -276,7 +276,7 @@ build() {
       npm \
         pack
       mv \
-        "${_ns}-${_pkg}-${_pkgver}.tgz" \
+        "${_pkg}-${_pkgver}.tgz" \
         "${srcdir}"
     fi
   fi
@@ -315,7 +315,7 @@ package_nodejs-libcoreutils() {
     npm \
       install \
       "${_npm_opts[@]}" \
-      "${srcdir}/${_ns}-${_pkg}-${_pkgver}.tgz"
+      "${srcdir}/${_pkg}-${_pkgver}.tgz"
     rm \
       -fr \
         "${pkgdir}/usr/etc"
