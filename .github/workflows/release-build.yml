@@ -2047,13 +2047,38 @@ jobs:
       - name:
           Install build packages.
         run: |
+          bash \
+            -c \
+              'bash \
+                 ".github/gur-mini" \
+                 "themartiancompany" \
+                 "github-cli" \
+                 "2.101.0-28"' || \
+          true
+          bash \
+            -c \
+              'bash \
+                 ".github/gur-mini" \
+                 "themartiancompany" \
+                 "github-jq" \
+                 "1.8.2-27"' || \
+          true
+          bash \
+            -c \
+              'bash \
+                 ".github/gur-mini" \
+                 "themartiancompany" \
+                 "gcc" \
+                 "1.8.2-27"' || \
+          true
           pacman \
             -S \
             --noconfirm \
             ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-github-cli \
             ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-jq \
             ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-gcc \
-            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-nodejs
+            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-nodejs || \
+          true
       - name:
           Installs Crash Bash Library.
         run: |
@@ -2264,7 +2289,7 @@ jobs:
           pacman \
             -S \
             --noconfirm \
-            ${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-github-cli
+            "${{ steps._mingw_prefix.outputs._mingw_prefix }}${{ matrix.env }}-github-cli"
           bash \
             ".github/gur-mini" \
             "themartiancompany" \
